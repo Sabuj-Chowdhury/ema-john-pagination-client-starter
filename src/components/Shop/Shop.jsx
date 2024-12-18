@@ -14,8 +14,9 @@ const Shop = () => {
   const [cart, setCart] = useState([]);
   const { count } = useLoaderData();
   //   console.log(typeof count);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const itemsPerPage = 10; //will change later :TODO
+  // const itemsPerPage = 10;  //will change later :DONE
   const numberOfPages = Math.ceil(count / itemsPerPage); //total number of pages
 
   const pages = [];
@@ -25,7 +26,7 @@ const Shop = () => {
   //   below is another common way to make the pages  /* const pages = [...Array(numberOfPages).keys()]
 
   // DONE ->1: Get the total number of Items
-  // TODO ->2: Number of items per page Dynamically
+  // DONE ->2: Number of items per page Dynamically
   // DONE ->3: get total number of pages
   // DONE ->4: create pagination controls/buttons
   useEffect(() => {
@@ -79,6 +80,14 @@ const Shop = () => {
     deleteShoppingCart();
   };
 
+  const handlesItemsPerPage = (e) => {
+    // console.log(e.target.value);
+    const val = parseInt(e.target.value);
+    // console.log(typeof val);
+
+    setItemsPerPage(val);
+  };
+
   return (
     <div className="shop-container">
       <div className="products-container">
@@ -97,11 +106,22 @@ const Shop = () => {
           </Link>
         </Cart>
       </div>
-      <div>
+      <div className="pagination">
         {/* buttons for the pages */}
         {pages.map((page) => (
           <button key={page}>{page}</button>
         ))}
+        {/* dropdown menu */}
+        <select
+          defaultValue={itemsPerPage}
+          onChange={handlesItemsPerPage}
+          name=""
+          id=""
+        >
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
       </div>
     </div>
   );
