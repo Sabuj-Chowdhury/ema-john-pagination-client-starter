@@ -15,6 +15,7 @@ const Shop = () => {
   const { count } = useLoaderData();
   //   console.log(typeof count);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(0); //state for current page
 
   // const itemsPerPage = 10;  //will change later :DONE
   const numberOfPages = Math.ceil(count / itemsPerPage); //total number of pages
@@ -29,6 +30,7 @@ const Shop = () => {
   // DONE ->2: Number of items per page Dynamically
   // DONE ->3: get total number of pages
   // DONE ->4: create pagination controls/buttons
+  // DONE ->5: Get the current page
   useEffect(() => {
     fetch("http://localhost:5000/products")
       .then((res) => res.json())
@@ -86,6 +88,17 @@ const Shop = () => {
     // console.log(typeof val);
 
     setItemsPerPage(val);
+    setCurrentPage(0);
+  };
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  const handleNextPage = () => {
+    if (currentPage < pages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   return (
@@ -107,10 +120,19 @@ const Shop = () => {
         </Cart>
       </div>
       <div className="pagination">
+        <p>current page : {currentPage}</p>
+        <button onClick={handlePreviousPage}>prev</button>
         {/* buttons for the pages */}
         {pages.map((page) => (
-          <button key={page}>{page}</button>
+          <button
+            onClick={() => setCurrentPage(page)}
+            className={currentPage === page && "selected"}
+            key={page}
+          >
+            {page}
+          </button>
         ))}
+        <button onClick={handleNextPage}>next</button>
         {/* dropdown menu */}
         <select
           defaultValue={itemsPerPage}
